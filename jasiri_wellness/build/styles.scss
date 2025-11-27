@@ -1,0 +1,236 @@
+@use "sass:color";
+
+// VARIABLES
+$primary-gradient-start: #dbeafe;
+$primary-gradient-end: #e0e7ff;
+$white: #ffffff;
+$gray-100: #f3f4f6;
+$gray-200: #e5e7eb;
+$gray-500: #6b7280;
+$gray-600: #4b5563;
+$gray-800: #1f2937;
+$green-600: #16a34a;
+$red-500: #ef4444;
+$red-600: #dc2626;
+$blue-600: #2563eb;
+
+// MIXINS
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin button-base {
+  color: $white;
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  font-size: 1.25rem;
+  border: none;
+  cursor: pointer;
+
+  &:hover { transform: scale(1.05); }
+  &:active { transform: scale(0.95); }
+}
+
+@mixin button-primary {
+  @include button-base;
+  background: linear-gradient(to right, $primary-gradient-start, $primary-gradient-end);
+  color: $gray-800;
+
+  &:hover {
+    background: linear-gradient(
+      to right,
+      color.adjust($primary-gradient-start, $lightness: -5%),
+      color.adjust($primary-gradient-end, $lightness: -5%)
+    );
+  }
+
+  &:disabled {
+    background: $gray-500;
+    color: $gray-200;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
+
+@mixin button-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: $blue-600;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: opacity 0.2s ease;
+
+  &:hover { opacity: 0.75; }
+  &:active { opacity: 0.5; }
+}
+
+@mixin gradient-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, $gray-500, transparent);
+  margin-bottom: 1.5rem;
+}
+
+// CONTAINERS
+.container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, $primary-gradient-start, $primary-gradient-end);
+  @include flex-center;
+  padding: 1rem;
+}
+
+// CARD
+.card {
+  background-color: $white;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  padding: 2rem;
+  max-width: 28rem;
+  width: 100%;
+}
+
+// TITLES
+.title, .card-title, .harmony-title, .main-title {
+  color: $gray-800;
+  text-align: center;
+  font-weight: bold;
+}
+
+.title { font-size: 1.875rem; margin-bottom: 1.5rem; }
+.card-title { font-size: 1.5rem; margin-bottom: 1rem; }
+.harmony-title { font-size: 2rem; margin-bottom: 1rem; }
+.main-title { font-size: 2.5rem; }
+
+// COUNTER
+.countDisplay {
+  font-size: 3.75rem;
+  font-weight: bold;
+  transition: color 0.3s ease;
+
+  &.zero { color: $gray-800; }
+  &.positive { color: $green-600; }
+  &.negative { color: $red-600; }
+}
+
+// BUTTONS
+.btn {
+  @include button-base;
+
+  &Decrement {
+    background-color: $red-500;
+    &:hover { background-color: color.adjust($red-500, $lightness: -10%); }
+  }
+
+  &Reset {
+    background-color: $gray-500;
+    &:hover { background-color: color.adjust($gray-500, $lightness: -10%); }
+  }
+
+  &Increment {
+    background-color: $green-600;
+    &:hover { background-color: color.adjust($green-600, $lightness: -10%); }
+  }
+}
+
+.btn-primary {
+  @include button-primary;
+}
+
+// ERROR MESSAGE
+.error-message {
+  font-size: 0.875rem;
+  color: $red-600;
+  background-color: color.adjust($red-600, $lightness: 45%);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid $red-500;
+
+  &::before { content: "⚠ "; font-size: 1rem; }
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// INPUT FIELDS
+.input-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid $gray-500;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: $gray-800;
+  background-color: $white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    border-color: $blue-600;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  }
+
+  &::placeholder { color: $gray-600; }
+
+  &:disabled { background-color: color.adjust($gray-500, $lightness: 40%); cursor: not-allowed; }
+  &.error { border-color: $red-600; box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2); }
+}
+
+// FEATURES PAGE
+.features-container { min-height: 100vh; background-color: $gray-100; padding: 1.5rem; }
+.features-title { font-size: 1.875rem; font-weight: bold; margin-bottom: 1.5rem; }
+.features-list { max-width: 32rem; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; }
+.features-item { background-color: $white; padding: 1rem; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); font-size: 1rem; }
+.back-link a { color: $primary-gradient-end; text-decoration: underline; font-weight: 500; transition: all 0.2s ease;
+  &:hover { color: color.adjust($primary-gradient-end, $lightness: -10%); }
+}
+
+// APP CONTAINER & GRADIENTS
+.app-container {
+  min-height: 100vh;
+  padding: 1.5rem;
+  background: linear-gradient(to bottom right, $primary-gradient-start, $primary-gradient-end);
+  @include flex-center;
+  flex-direction: column;
+  transition: background 0.5s ease;
+  animation: calm-gradient 8s ease infinite alternate;
+}
+
+@keyframes calm-gradient {
+  0% { background: linear-gradient(135deg, $primary-gradient-start, $primary-gradient-end); }
+  100% { background: linear-gradient(135deg,
+      color.adjust($primary-gradient-start, $lightness: 8%),
+      color.adjust($primary-gradient-end, $lightness: 8%)); }
+}
+
+// CARD WRAPPER
+.harmony-card {
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(12px);
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 32rem;
+  width: 100%;
+  box-shadow: 0 20px 40px -12px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease;
+
+  &:hover { transform: translateY(-4px); }
+}
+
+.harmony-subtext { text-align: center; font-size: 1rem; color: $gray-600; margin-bottom: 1.5rem; }
+
+// BUTTONS EXAMPLES
+.btn-success { background: #22c55e; }
+.btn-warning { background: #fbbf24; }
+.btn-pink { background: #ec4899; }
