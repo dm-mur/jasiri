@@ -25,7 +25,7 @@ function Navigation() {
       "className": "button-base"
     }, [__jacJsx("div", {
       "className": "title"
-    }, ["Jasiri-Ke Wellness"]), __jacJsx("div", {
+    }, [__jacJsx("i", {}, ["Jasiri-Ke Wellness"])]), __jacJsx("div", {
       "className": "button-link"
     }, [__jacJsx(Link, {
       "to": "/jasiri",
@@ -230,7 +230,7 @@ function SignupPage() {
 function HomePage() {
   if (jacIsLoggedIn()) {
     return __jacJsx(Navigate, {
-      "to": "/todos"
+      "to": "/jasiri"
     }, []);
   }
   return __jacJsx(Navigate, {
@@ -238,42 +238,56 @@ function HomePage() {
   }, []);
 }
 function FeaturesPage() {
-  if (jacIsLoggedIn()) {
-    return __jacJsx("div", {
-      "className": "features-container"
-    }, [__jacJsx("h2", {
-      "className": "features-title"
-    }, ["Your Space - Jasiri-Ke Harmony Space ✨"]), __jacJsx("p", {
-      "className": "harmony-subtext"
-    }, ["Your safe space for mental wellness 💚"]), __jacJsx("ul", {
-      "className": "features-list"
-    }, [__jacJsx("li", {
-      "className": "features-item"
-    }, ["🧠 Track your mood daily"]), __jacJsx("li", {
-      "className": "features-item"
-    }, ["📔 Maintain a private journal"]), __jacJsx("li", {
-      "className": "features-item"
-    }, ["💬 Chat with emotional AI"]), __jacJsx("li", {
-      "className": "features-item"
-    }, ["📊 View mood insights over time"]), __jacJsx("li", {
-      "className": "features-item"
-    }, ["🧘 Guided breathing & calm mode"]), __jacJsx("li", {
-      "className": "features-item"
-    }, ["🧾 Personalized Wellness Plans"]), __jacJsx("li", {
-      "className": "features-item"
-    }, ["🫂 Community Support Forums"]), __jacJsx("li", {
-      "className": "features-item"
-    }, ["📚 Professional Resources & Articles"]), __jacJsx("li", {
-      "className": "features-item"
-    }, ["🕰️ 24/7 Chat Support"])]), __jacJsx("div", {
-      "className": "back-link"
-    }, [__jacJsx("a", {
-      "href": "/"
-    }, ["Back to Home"])])]);
+  if (!jacIsLoggedIn()) {
+    return __jacJsx(Navigate, {
+      "to": "/login"
+    }, []);
   }
-  return __jacJsx(Navigate, {
-    "to": "/login"
-  }, []);
+  return __jacJsx("div", {
+    "className": "home-page"
+  }, [__jacJsx("header", {
+    "className": "app-header"
+  }, [__jacJsx("h1", {
+    "className": "main-title"
+  }, ["Jasiri-Ke Harmony Space ✨"]), __jacJsx("p", {
+    "className": "sub-title"
+  }, ["Your safe space for mental wellness 💚"])]), __jacJsx("div", {
+    "className": "home-container"
+  }, [__jacJsx("aside", {
+    "className": "sidebar"
+  }, [__jacJsx("h2", {
+    "className": "sidebar-title"
+  }, ["Explore"]), __jacJsx("ul", {
+    "className": "features-list"
+  }, [__jacJsx("li", {
+    "className": "features-item"
+  }, ["🧠 Track your mood daily"]), __jacJsx("li", {
+    "className": "features-item"
+  }, ["📔 Maintain a private journal"]), __jacJsx("li", {
+    "className": "features-item"
+  }, ["💬 Chat with emotional AI"]), __jacJsx("li", {
+    "className": "features-item"
+  }, ["📊 View mood insights over time"]), __jacJsx("li", {
+    "className": "features-item"
+  }, ["🧘 Guided breathing & calm mode"]), __jacJsx("li", {
+    "className": "features-item"
+  }, ["🧾 Personalized Wellness Plans"]), __jacJsx("li", {
+    "className": "features-item"
+  }, ["🫂 Community Support Forums"]), __jacJsx("li", {
+    "className": "features-item"
+  }, ["📚 Professional Resources & Articles"]), __jacJsx("li", {
+    "className": "features-item"
+  }, ["🕰️ 24/7 Chat Support"])])]), __jacJsx("main", {
+    "className": "main-content"
+  }, [__jacJsx("h2", {
+    "className": "panel-title"
+  }, ["Express Your Feelings"]), __jacJsx("p", {}, ["Type, speak, or use emoji to share how you feel:"]), __jacJsx("textarea", {
+    "placeholder": "Type your feelings here...",
+    "rows": 1,
+    "className": "feeling-input"
+  }, []), __jacJsx("div", {
+    "className": "voice-emoji-buttons"
+  }, [__jacJsx("button", {}, ["🎤 Voice"]), __jacJsx("button", {}, ["😊 Emoji"])])])])]);
 }
 function app() {
   return __jacJsx(Router, {}, [__jacJsx("div", {
