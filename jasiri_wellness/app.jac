@@ -23,33 +23,17 @@ cl import from "@jac-client/utils" {
 # Backend - nodes
 node Mood {
     has text: str;
-
+    has created_at: datetime;
+    has user_id: int;
 }
 
 # Backend - walkers
-walker create_mood {
+walker share_mood {
     has text: str;
 
-    can create with `root entry {
+    can share with `root entry {
         new_mood = here ++> Mood(text=self.text);
         report new_mood;
-    }
-}
-
-walker read_mood {
-    can read with `root entry {
-        visit [-->(`?Mood)];
-    }
-
-    can report_mood with Mood entry {
-        report here;
-    }
-}
-
-walker toggle_mood {
-    can toggle with Mood entry {
-        here.done = not here.done;
-        report here;
     }
 }
 
@@ -70,7 +54,7 @@ cl {
             return <nav className="button-base">
             <div
                 className="title">
-                Jasiri-Ke Wellness
+                <i>Jasiri-Ke Wellness</i>
             </div>
             <div className="button-link">
                 <Link
@@ -287,44 +271,66 @@ cl {
         </div>;
     }
 
-
-# Home Page
-    def HomePage()  -> any {
-        if jacIsLoggedIn() {
-            return <Navigate to="/todos" />;
+    # Home Page
+        def HomePage()  -> any {
+            if jacIsLoggedIn() {
+                return <Navigate to="/jasiri" />;
+            }
+            return <Navigate to="/login" />;
         }
-        return <Navigate to="/login" />;
-    }
 
 
 
-    def FeaturesPage() -> any {
-        if jacIsLoggedIn() {
-            return (
-                <div className="features-container">
-                <h2 className="features-title">
-                    Your Space - Jasiri-Ke Harmony Space ✨
-                </h2>
-                <p className="harmony-subtext">Your safe space for mental wellness 💚</p>
-
-                <ul className="features-list">
-                    <li className="features-item">🧠 Track your mood daily</li>
-                    <li className="features-item">📔 Maintain a private journal</li>
-                    <li className="features-item">💬 Chat with emotional AI</li>
-                    <li className="features-item">📊 View mood insights over time</li>
-                    <li className="features-item">🧘 Guided breathing & calm mode</li>
-                    <li className="features-item">🧾 Personalized Wellness Plans</li>
-                    <li className="features-item">🫂 Community Support Forums</li>
-                    <li className="features-item">📚 Professional Resources & Articles</li>
-                    <li className="features-item">🕰️ 24/7 Chat Support</li>
-                </ul>
-                <div className="back-link">
-                    <a href="/">Back to Home</a>
-                </div>
-                </div>
-            );
+    def FeaturesPage() {
+        #// Check if logged in
+        if not jacIsLoggedIn() {
+            return <Navigate to="/login" />;
         }
-        return <Navigate to="/login" />;
+
+        return (
+            <div className="home-page">
+                #{/* Header */}
+                <header className="app-header">
+                    <h1 className="main-title">Jasiri-Ke Harmony Space ✨</h1>
+                    <p className="sub-title">Your safe space for mental wellness 💚</p>
+                </header>
+
+                #{/* Main container with sidebar and main panel */}
+                <div className="home-container">
+                    #${/* Sidebar */}
+                    <aside className="sidebar">
+                        <h2 className="sidebar-title">Explore</h2>
+                        <ul className="features-list">
+                            <li className="features-item">🧠 Track your mood daily</li>
+                            <li className="features-item">📔 Maintain a private journal</li>
+                            <li className="features-item">💬 Chat with emotional AI</li>
+                            <li className="features-item">📊 View mood insights over time</li>
+                            <li className="features-item">🧘 Guided breathing & calm mode</li>
+                            <li className="features-item">🧾 Personalized Wellness Plans</li>
+                            <li className="features-item">🫂 Community Support Forums</li>
+                            <li className="features-item">📚 Professional Resources & Articles</li>
+                            <li className="features-item">🕰️ 24/7 Chat Support</li>
+                        </ul>
+                    </aside>
+
+                    #{/* Main panel */}
+                    <main className="main-content">
+                        <h2 className="panel-title">Express Your Feelings</h2>
+                        <p>Type, speak, or use emoji to share how you feel:</p>
+                        <textarea
+                            placeholder="Type your feelings here..."
+                            rows={1}
+                            className="feeling-input"
+                        />
+                        <div className="voice-emoji-buttons">
+                            <button>🎤 Voice</button>
+                            <button>😊 Emoji</button>
+                        </div>
+                    </main>
+                </div>
+
+            </div>
+        );
     }
 
 
