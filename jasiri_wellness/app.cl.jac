@@ -4,9 +4,9 @@
     useEffect
 }
 
-import ".styles.scss";
+cl import ".styles.scss";
 
- import from "@jac-client/utils" {
+cl import from "@jac-client/utils" {
     Router,
     Routes,
     Route,
@@ -265,33 +265,51 @@ import ".styles.scss";
 
 
 
-def FeaturesPage() {
-    # Check if logged in
-    if not jacIsLoggedIn() {
-        return <Navigate to="/login" />;
-    }
+    def FeaturesPage() {
+        #// Check if logged in
+        if not jacIsLoggedIn() {
+            return <Navigate to="/login" />;
+        }
 
-    let [input, setInput] = useState("");
-    let [moods, setMoods] = useState([]);
-    let [moodOutput, setMoodOutput] = useState("");
+        let [moods, setMoods] = useState([]);
+        let [input, setInput] = useState("");
+        let [moodText, setMoodText] = useState("");
+        let [moodOutput, setMoodOutput] = useState("");
+        
+        # Load existing mood on mount
+        useEffect(
+            lambda -> None { async def loadMoods() -> None {
+                result = root spawn generate_response(text=input.trim());
+                setMoods(result.reports if result.reports else []);
+            }
+            loadMoods();
+        }, []
+        );
+
+        def handleMoodSubmit() {
+            spawn generate_response(text=moodText);
+        }
+
+
+        # Add mood handler
+
+
+        async def addMood() -> None {
+            if not input.trim() {
+                return;
+            }
+            result = root spawn generate_response(text=input.trim());
+
+            console.log(result);
             
-    # Load existing mood
+            setMoodOutput(result.reports[0][0]) if result.reports else moods;
+            setInput("");
+        }
 
-
-
-    # Append emoji to input
-    def addEmoji(emoji:str) -> None {
-        setInput(input + " " + emoji);
-    }
-
-    # Submit text or emoji input to the walker
-    async def addMood() -> None {
-        if not input.trim() { return; }
-
-        let result = root <- spawn generate_response(text=input.trim());
-        setMoodOutput(result.reports[0] if result.reports else "");
-        setInput("");  # Clear input after submission
-    }
+        async def getsupportiveResponse(e:any) -> None {
+            setMoods(e.target.value);
+            
+        }
 
 
     return (
@@ -304,16 +322,16 @@ def FeaturesPage() {
             <div className="home-container">
                 <aside className="sidebar">
                     <h2 className="sidebar-title">Explore</h2>
-                    <ul className="features-list">
-                        <li>🧠 Track your mood daily</li>
-                        <li>📔 Maintain a private journal</li>
-                        <li>💬 Chat with emotional AI</li>
-                        <li>📊 View mood insights over time</li>
-                        <li>🧘 Guided breathing & calm mode</li>
-                        <li>🧾 Personalized Wellness Plans</li>
-                        <li>🫂 Community Support Forums</li>
-                        <li>📚 Professional Resources & Articles</li>
-                        <li>🕰️ 24/7 Chat Support</li>
+                    <ul className="sidebar-list">
+                        <li className="sidebar-item">🧠 Track your mood daily</li>
+                        <li className="sidebar-item">📔 Maintain a private journal</li>
+                        <li className="sidebar-item">💬 Chat with emotional AI</li>
+                        <li className="sidebar-item">📊 View mood insights over time</li>
+                        <li className="sidebar-item">🧘 Guided breathing & calm mode</li>
+                        <li className="sidebar-item">🧾 Personalized Wellness Plans</li>
+                        <li className="sidebar-item">🫂 Community Support Forums</li>
+                        <li className="sidebar-item">📚 Professional Resources & Articles</li>
+                        <li className="sidebar-item">🕰️ 24/7 Chat Support</li>
                     </ul>
                 </aside>
 
