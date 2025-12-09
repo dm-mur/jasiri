@@ -243,47 +243,99 @@ function FeaturesPage() {
       "to": "/login"
     }, []);
   }
-  var _useState11 = useState(""),
+  var _useState11 = useState([]),
     _useState12 = _slicedToArray(_useState11, 2),
-    input = _useState12[0],
-    setInput = _useState12[1];
-  var _useState13 = useState([]),
+    moods = _useState12[0],
+    setMoods = _useState12[1];
+  var _useState13 = useState(""),
     _useState14 = _slicedToArray(_useState13, 2),
-    moods = _useState14[0],
-    setMoods = _useState14[1];
+    input = _useState14[0],
+    setInput = _useState14[1];
   var _useState15 = useState(""),
     _useState16 = _slicedToArray(_useState15, 2),
-    moodOutput = _useState16[0],
-    setMoodOutput = _useState16[1];
-  function addEmoji(emoji) {
-    setInput(input + " " + emoji);
+    moodText = _useState16[0],
+    setMoodText = _useState16[1];
+  var _useState17 = useState(""),
+    _useState18 = _slicedToArray(_useState17, 2),
+    moodOutput = _useState18[0],
+    setMoodOutput = _useState18[1];
+  useEffect(function () {
+    function loadMoods() {
+      return _loadMoods.apply(this, arguments);
+    }
+    function _loadMoods() {
+      _loadMoods = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+        var result;
+        return _regenerator().w(function (_context3) {
+          while (1) switch (_context3.n) {
+            case 0:
+              _context3.n = 1;
+              return __jacSpawn("generate_response", "", {
+                "text": input.trim()
+              });
+            case 1:
+              result = _context3.v;
+              setMoods(result.reports ? result.reports : []);
+            case 2:
+              return _context3.a(2);
+          }
+        }, _callee3);
+      }));
+      return _loadMoods.apply(this, arguments);
+    }
+    loadMoods();
+  }, []);
+  function handleMoodSubmit() {
+    !generate_response({
+      text: moodText
+    });
   }
   function addMood() {
     return _addMood.apply(this, arguments);
   }
   function _addMood() {
-    _addMood = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
+    _addMood = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
       var result;
-      return _regenerator().w(function (_context3) {
-        while (1) switch (_context3.n) {
+      return _regenerator().w(function (_context4) {
+        while (1) switch (_context4.n) {
           case 0:
             if (input.trim()) {
-              _context3.n = 1;
+              _context4.n = 1;
               break;
             }
-            return _context3.a(2);
+            return _context4.a(2);
           case 1:
-            result = root < -!generate_response({
-              text: input.trim()
+            _context4.n = 2;
+            return __jacSpawn("generate_response", "", {
+              "text": input.trim()
             });
-            setMoodOutput(result.reports ? result.reports[0] : "");
-            setInput("");
           case 2:
-            return _context3.a(2);
+            result = _context4.v;
+            console.log(result);
+            result.reports ? setMoodOutput(result.reports[0][0]) : moods;
+            setInput("");
+          case 3:
+            return _context4.a(2);
         }
-      }, _callee3);
+      }, _callee4);
     }));
     return _addMood.apply(this, arguments);
+  }
+  function getsupportiveResponse(_x3) {
+    return _getsupportiveResponse.apply(this, arguments);
+  }
+  function _getsupportiveResponse() {
+    _getsupportiveResponse = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(e) {
+      return _regenerator().w(function (_context5) {
+        while (1) switch (_context5.n) {
+          case 0:
+            setMoods(e.target.value);
+          case 1:
+            return _context5.a(2);
+        }
+      }, _callee5);
+    }));
+    return _getsupportiveResponse.apply(this, arguments);
   }
   return __jacJsx("div", {
     "className": "home-page"
@@ -300,8 +352,26 @@ function FeaturesPage() {
   }, [__jacJsx("h2", {
     "className": "sidebar-title"
   }, ["Explore"]), __jacJsx("ul", {
-    "className": "features-list"
-  }, [__jacJsx("li", {}, ["🧠 Track your mood daily"]), __jacJsx("li", {}, ["📔 Maintain a private journal"]), __jacJsx("li", {}, ["💬 Chat with emotional AI"]), __jacJsx("li", {}, ["📊 View mood insights over time"]), __jacJsx("li", {}, ["🧘 Guided breathing & calm mode"]), __jacJsx("li", {}, ["🧾 Personalized Wellness Plans"]), __jacJsx("li", {}, ["🫂 Community Support Forums"]), __jacJsx("li", {}, ["📚 Professional Resources & Articles"]), __jacJsx("li", {}, ["🕰️ 24/7 Chat Support"])])]), __jacJsx("main", {
+    "className": "sidebar-list"
+  }, [__jacJsx("li", {
+    "className": "sidebar-item"
+  }, ["🧠 Track your mood daily"]), __jacJsx("li", {
+    "className": "sidebar-item"
+  }, ["📔 Maintain a private journal"]), __jacJsx("li", {
+    "className": "sidebar-item"
+  }, ["💬 Chat with emotional AI"]), __jacJsx("li", {
+    "className": "sidebar-item"
+  }, ["📊 View mood insights over time"]), __jacJsx("li", {
+    "className": "sidebar-item"
+  }, ["🧘 Guided breathing & calm mode"]), __jacJsx("li", {
+    "className": "sidebar-item"
+  }, ["🧾 Personalized Wellness Plans"]), __jacJsx("li", {
+    "className": "sidebar-item"
+  }, ["🫂 Community Support Forums"]), __jacJsx("li", {
+    "className": "sidebar-item"
+  }, ["📚 Professional Resources & Articles"]), __jacJsx("li", {
+    "className": "sidebar-item"
+  }, ["🕰️ 24/7 Chat Support"])])]), __jacJsx("main", {
     "className": "main-content"
   }, [__jacJsx("h2", {
     "className": "panel-title"
