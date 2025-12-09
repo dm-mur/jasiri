@@ -1,20 +1,48 @@
 @use "sass:color";
 
+// ===========================
 // VARIABLES
+// ===========================
+
+// Base gradient
 $primary-gradient-start: #dbeafe;
 $primary-gradient-end: #e0e7ff;
+
+// Denser variants for harmony
+$sidebar-gradient: linear-gradient(
+  to bottom right,
+  color.adjust($primary-gradient-start, $lightness: -8%),
+  color.adjust($primary-gradient-end, $lightness: -8%)
+);
+
+$output-gradient: linear-gradient(
+  to bottom right,
+  color.adjust($primary-gradient-start, $lightness: -6%),
+  color.adjust($primary-gradient-end, $lightness: -6%)
+);
+
+// Neutral colors
 $white: #ffffff;
 $gray-100: #f3f4f6;
 $gray-200: #e5e7eb;
 $gray-500: #6b7280;
 $gray-600: #4b5563;
 $gray-800: #1f2937;
+
+// Accent colors
 $green-600: #16a34a;
+$blue-600: #2563eb;
 $red-500: #ef4444;
 $red-600: #dc2626;
-$blue-600: #2563eb;
+$yellow-400: #facc15;
 
+// Transparent cards
+$card-bg: rgba(255, 255, 255, 0.6);
+$blur-filter: blur(12px);
+
+// ===========================
 // MIXINS
+// ===========================
 @mixin flex-center {
   display: flex;
   align-items: center;
@@ -36,67 +64,51 @@ $blue-600: #2563eb;
   &:active { transform: scale(0.95); }
 }
 
-@mixin button-primary {
+@mixin button-harmony($bg-color, $text-color: $gray-800) {
   @include button-base;
-  background: linear-gradient(to right, $primary-gradient-start, $primary-gradient-end);
-  color: $gray-800;
+  background: $bg-color;
+  color: $text-color;
 
-  &:hover {
-    background: linear-gradient(
-      to right,
-      color.adjust($primary-gradient-start, $lightness: -5%),
-      color.adjust($primary-gradient-end, $lightness: -5%)
-    );
-  }
-
-  &:disabled {
-    background: $gray-500;
-    color: $gray-200;
-    cursor: not-allowed;
-    box-shadow: none;
-  }
+  &:hover { background: color.adjust($bg-color, $lightness: -5%); }
+  &:active { transform: scale(0.95); }
 }
 
-@mixin button-link {
-  background: none;
-  border: none;
+// ===========================
+// GLOBAL STYLES
+// ===========================
+body, html {
+  margin: 0;
   padding: 0;
-  color: $blue-600;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  text-decoration: underline;
-  transition: opacity 0.2s ease;
-
-  &:hover { opacity: 0.75; }
-  &:active { opacity: 0.5; }
+  font-family: system-ui, sans-serif;
+  background: linear-gradient(to bottom right, $primary-gradient-start, $primary-gradient-end);
 }
 
-@mixin gradient-divider {
-  height: 1px;
-  background: linear-gradient(to right, transparent, $gray-500, transparent);
-  margin-bottom: 1.5rem;
-}
-
-// CONTAINERS
 .container {
   min-height: 100vh;
-  background: linear-gradient(to bottom right, $primary-gradient-start, $primary-gradient-end);
   @include flex-center;
   padding: 1rem;
 }
 
-// CARD
-.card {
-  background-color: $white;
+// ===========================
+// CARDS & PANELS
+// ===========================
+.card, .harmony-card {
   border-radius: 1rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   padding: 2rem;
-  max-width: 28rem;
+  max-width: 32rem;
   width: 100%;
+  box-shadow: 0 20px 40px -12px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease;
 }
 
+.card { background-color: $white; }
+.harmony-card { background: $card-bg; backdrop-filter: $blur-filter; }
+
+.harmony-card:hover { transform: translateY(-4px); }
+
+// ===========================
 // TITLES
+// ===========================
 .title, .card-title, .harmony-title, .main-title {
   color: $gray-800;
   text-align: center;
@@ -108,42 +120,40 @@ $blue-600: #2563eb;
 .harmony-title { font-size: 2rem; margin-bottom: 1rem; }
 .main-title { font-size: 2.5rem; }
 
-// COUNTER
-.countDisplay {
-  font-size: 3.75rem;
-  font-weight: bold;
-  transition: color 0.3s ease;
-
-  &.zero { color: $gray-800; }
-  &.positive { color: $green-600; }
-  &.negative { color: $red-600; }
-}
-
+// ===========================
 // BUTTONS
-.btn {
-  @include button-base;
+// ===========================
+.btn-primary   { @include button-harmony($blue-600, $white); }
+.btn-success   { @include button-harmony($green-600, $white); }
+.btn-warning   { @include button-harmony($yellow-400, $gray-800); }
+.btn-danger    { @include button-harmony($red-500, $white); }
 
-  &Decrement {
-    background-color: $red-500;
-    &:hover { background-color: color.adjust($red-500, $lightness: -10%); }
+// ===========================
+// INPUTS
+// ===========================
+.input-field {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: $gray-800;
+  background-color: rgba(255,255,255,0.7);
+  border: 1px solid $gray-200;
+  transition: all 0.2s ease;
+  outline: none;
+
+  &:focus {
+    border-color: $blue-600;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
   }
 
-  &Reset {
-    background-color: $gray-500;
-    &:hover { background-color: color.adjust($gray-500, $lightness: -10%); }
-  }
-
-  &Increment {
-    background-color: $green-600;
-    &:hover { background-color: color.adjust($green-600, $lightness: -10%); }
-  }
+  &::placeholder { color: $gray-600; }
+  &:disabled { background-color: color.adjust($gray-100, $lightness: -5%); cursor: not-allowed; }
 }
 
-.btn-primary {
-  @include button-primary;
-}
-
-// ERROR MESSAGE
+// ===========================
+// ERROR MESSAGES
+// ===========================
 .error-message {
   font-size: 0.875rem;
   color: $red-600;
@@ -164,87 +174,10 @@ $blue-600: #2563eb;
   to { opacity: 1; transform: translateY(0); }
 }
 
-// INPUT FIELDS
-.input-field {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid $gray-500;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  color: $gray-800;
-  background-color: $white;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-
-  &:focus {
-    border-color: $blue-600;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
-  }
-
-  &::placeholder { color: $gray-600; }
-
-  &:disabled { background-color: color.adjust($gray-500, $lightness: 40%); cursor: not-allowed; }
-  &.error { border-color: $red-600; box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2); }
-}
-
-// FEATURES PAGE
-.features-container { min-height: 100vh; background-color: $gray-100; padding: 1.5rem; }
-.features-title { font-size: 1.875rem; font-weight: bold; margin-bottom: 1.5rem; }
-.features-list { max-width: 32rem; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; }
-.features-item { background-color: $white; padding: 1rem; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); font-size: 1rem; }
-.back-link a { color: $primary-gradient-end; text-decoration: underline; font-weight: 500; transition: all 0.2s ease;
-  &:hover { color: color.adjust($primary-gradient-end, $lightness: -10%); }
-}
-
-// APP CONTAINER & GRADIENTS
-.app-container {
-  min-height: 100vh;
-  width: 100%;
-  padding: 0; // optional, your HomePage handles its own padding
-  background: linear-gradient(to bottom right, $primary-gradient-start, $primary-gradient-end);
-  flex-direction: column; 
-  transition: background 0.5s ease;
-  animation: calm-gradient 8s ease infinite alternate;
-}
-
-@keyframes calm-gradient {
-  0% { background: linear-gradient(135deg, $primary-gradient-start, $primary-gradient-end); }
-  100% { background: linear-gradient(135deg,
-      color.adjust($primary-gradient-start, $lightness: 8%),
-      color.adjust($primary-gradient-end, $lightness: 8%)); }
-}
-
-// CARD WRAPPER
-.harmony-card {
-  background: rgba(255,255,255,0.6);
-  backdrop-filter: blur(12px);
-  border-radius: 1rem;
-  padding: 2rem;
-  max-width: 32rem;
-  width: 100%;
-  box-shadow: 0 20px 40px -12px rgba(0,0,0,0.25);
-  transition: transform 0.3s ease;
-
-  &:hover { transform: translateY(-4px); }
-}
-
-.harmony-subtext { text-align: center; font-size: 1rem; color: $gray-600; margin-bottom: 1.5rem; }
-
-// BUTTONS EXAMPLES
-.btn-success { background: #22c55e; }
-.btn-warning { background: #fbbf24; }
-.btn-pink { background: #ec4899; }
-
-/* ===========================
-   HOMEPAGE STRUCTURE
-=========================== */
-
-.home-page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  width: 100%;
-}
+// ===========================
+// HOMEPAGE LAYOUT
+// ===========================
+.home-page { display: flex; flex-direction: column; min-height: 100vh; width: 100%; }
 
 .app-header {
   text-align: center;
@@ -252,17 +185,8 @@ $blue-600: #2563eb;
   background: linear-gradient(to right, $primary-gradient-start, $primary-gradient-end);
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 
-  .main-title {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: $gray-800;
-    margin-bottom: 0.5rem;
-  }
-
-  .sub-title {
-    font-size: 1.25rem;
-    color: $gray-600;
-  }
+  .main-title { font-size: 2.5rem; color: $gray-800; margin-bottom: 0.5rem; }
+  .sub-title  { font-size: 1.25rem; color: $gray-600; }
 }
 
 .home-container {
@@ -271,26 +195,31 @@ $blue-600: #2563eb;
   background: linear-gradient(to bottom right, $primary-gradient-start, $primary-gradient-end);
 }
 
+// Sidebar
 .sidebar {
   width: 280px;
-  min-height: calc(100vh - 140px); // subtract header height approx
+  min-height: calc(100vh - 140px);
   padding: 2rem 1.5rem;
-  background-color: $gray-100;
+  background: $sidebar-gradient;
   border-right: 1px solid $gray-200;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 
-  .sidebar-title {
-    font-size: 1.75rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    text-align: center;
+  .sidebar-title { font-size: 1.75rem; font-weight: bold; margin-bottom: 1rem; color: $gray-800; text-align: center; }
+
+  .sidebar-item {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
     color: $gray-800;
+    transition: all 0.2s ease;
+
+    &:hover { background-color: color.adjust($gray-100, $lightness: -5%); }
   }
 }
 
+// Main content & output
 .main-content {
   flex: 1;
   padding: 3rem 2rem;
@@ -299,12 +228,21 @@ $blue-600: #2563eb;
   align-items: center;
   gap: 2rem;
 
-  .panel-title {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    text-align: center;
+  .panel-title { font-size: 2rem; font-weight: bold; color: $gray-800; text-align: center; }
+
+  .output-panel {
+    width: 100%;
+    max-width: 800px;
+    background: $output-gradient;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    font-size: 1rem;
+    line-height: 1.6;
     color: $gray-800;
+    transition: all 0.3s ease;
+
+    &:hover { box-shadow: 0 12px 28px rgba(0,0,0,0.12); }
   }
 
   .feeling-input {
@@ -328,23 +266,81 @@ $blue-600: #2563eb;
   }
 }
 
+// ===========================
+// RESPONSIVE
+// ===========================
 @media (max-width: 1024px) {
-  .home-container {
-    flex-direction: column;
+  .home-container { flex-direction: column; }
+  .sidebar { width: 100%; min-height: auto; border-right: none; border-bottom: 1px solid $gray-200; }
+  .main-content { width: 100%; padding: 2rem 1rem; }
+  .feeling-input { max-width: 100%; }
+}
+
+/* ===========================
+   EMOJI PICKER STYLES
+=========================== */
+
+.emoji-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;             // spacing between emojis
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 1rem auto;       // center horizontally
+  justify-content: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
   }
-  .sidebar {
-    width: 100%;
-    min-height: auto;
-    border-right: none;
-    border-bottom: 1px solid $gray-200;
-  }
-  .main-content {
-    width: 100%;
-    padding: 2rem 1rem;
-  }
-  .feeling-input {
-    max-width: 100%;
+
+  .emoji-button {
+    font-size: 1.5rem;     // emoji size
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 50%;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      transform: scale(1.3);
+    }
+
+    &:active {
+      transform: scale(1.1);
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    &.selected {
+      background-color: rgba(37, 99, 235, 0.15);
+      transform: scale(1.3);
+    }
   }
 }
 
+/* Optional: make it scrollable if too many emojis */
+.emoji-picker-scrollable {
+  max-height: 200px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+}
 

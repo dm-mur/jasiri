@@ -87,7 +87,39 @@ function FeaturesPage() {
   if (!jacIsLoggedIn()) {
     return __jacJsx(Navigate, {"to": "/login"}, []);
   }
-  return __jacJsx("div", {"className": "home-page"}, [__jacJsx("header", {"className": "app-header"}, [__jacJsx("h1", {"className": "main-title"}, ["Jasiri-Ke Harmony Space ✨"]), __jacJsx("p", {"className": "sub-title"}, ["Your safe space for mental wellness 💚"])]), __jacJsx("div", {"className": "home-container"}, [__jacJsx("aside", {"className": "sidebar"}, [__jacJsx("h2", {"className": "sidebar-title"}, ["Explore"]), __jacJsx("ul", {"className": "features-list"}, [__jacJsx("li", {"className": "features-item"}, ["🧠 Track your mood daily"]), __jacJsx("li", {"className": "features-item"}, ["📔 Maintain a private journal"]), __jacJsx("li", {"className": "features-item"}, ["💬 Chat with emotional AI"]), __jacJsx("li", {"className": "features-item"}, ["📊 View mood insights over time"]), __jacJsx("li", {"className": "features-item"}, ["🧘 Guided breathing & calm mode"]), __jacJsx("li", {"className": "features-item"}, ["🧾 Personalized Wellness Plans"]), __jacJsx("li", {"className": "features-item"}, ["🫂 Community Support Forums"]), __jacJsx("li", {"className": "features-item"}, ["📚 Professional Resources & Articles"]), __jacJsx("li", {"className": "features-item"}, ["🕰️ 24/7 Chat Support"])])]), __jacJsx("main", {"className": "main-content"}, [__jacJsx("h2", {"className": "panel-title"}, ["Express Your Feelings"]), __jacJsx("p", {}, ["Type, speak, or use emoji to share how you feel:"]), __jacJsx("textarea", {"placeholder": "Type your feelings here...", "rows": 1, "className": "feeling-input"}, []), __jacJsx("div", {"className": "voice-emoji-buttons"}, [__jacJsx("button", {}, ["🎤 Voice"]), __jacJsx("button", {}, ["😊 Emoji"])])])])]);
+  let [input, setInput] = useState("");
+  let [moods, setMoods] = useState([]);
+  let [moodOutput, setMoodOutput] = useState("");
+  function addEmoji(emoji) {
+    setInput(input + " " + emoji);
+  }
+  async function addMood() {
+    if (!input.trim()) {
+      return;
+    }
+    let result = root < -!generate_response({text: input.trim()});
+    setMoodOutput(result.reports ? result.reports[0] : "");
+    setInput("");
+  }
+  return __jacJsx("div", {"className": "home-page"}, [__jacJsx("header", {"className": "app-header"}, [__jacJsx("h1", {"className": "main-title"}, ["Jasiri-Ke Harmony Space ✨"]), __jacJsx("p", {"className": "sub-title"}, ["Your safe space for mental wellness 💚"])]), __jacJsx("div", {"className": "home-container"}, [__jacJsx("aside", {"className": "sidebar"}, [__jacJsx("h2", {"className": "sidebar-title"}, ["Explore"]), __jacJsx("ul", {"className": "features-list"}, [__jacJsx("li", {}, ["🧠 Track your mood daily"]), __jacJsx("li", {}, ["📔 Maintain a private journal"]), __jacJsx("li", {}, ["💬 Chat with emotional AI"]), __jacJsx("li", {}, ["📊 View mood insights over time"]), __jacJsx("li", {}, ["🧘 Guided breathing & calm mode"]), __jacJsx("li", {}, ["🧾 Personalized Wellness Plans"]), __jacJsx("li", {}, ["🫂 Community Support Forums"]), __jacJsx("li", {}, ["📚 Professional Resources & Articles"]), __jacJsx("li", {}, ["🕰️ 24/7 Chat Support"])])]), __jacJsx("main", {"className": "main-content"}, [__jacJsx("h2", {"className": "panel-title"}, ["Express Your Feelings"]), __jacJsx("p", {}, ["Type your feelings or use emojis below:"]), __jacJsx("div", {"className": "feeling-input"}, [__jacJsx("input", {"type": "text", "value": input, "placeholder": "Type your feelings here...", "className": "input-field", "onChange": e => {
+    setInput(e.target.value);
+  }, "onKeyPress": e => {
+    if (e.key === "Enter") {
+      addMood();
+    }
+  }}, []), __jacJsx("div", {"className": "emoji-picker"}, [__jacJsx("span", {"className": "emoji-button", "onClick": _ => {
+    addEmoji("\ud83d\ude0a");
+  }}, ["😊"]), __jacJsx("span", {"className": "emoji-button", "onClick": _ => {
+    addEmoji("\ud83d\ude14");
+  }}, ["😔"]), __jacJsx("span", {"className": "emoji-button", "onClick": _ => {
+    addEmoji("\ud83d\ude21");
+  }}, ["😡"]), __jacJsx("span", {"className": "emoji-button", "onClick": _ => {
+    addEmoji("\ud83d\ude22");
+  }}, ["😢"]), __jacJsx("span", {"className": "emoji-button", "onClick": _ => {
+    addEmoji("\ud83d\ude34");
+  }}, ["😴"]), __jacJsx("span", {"className": "emoji-button", "onClick": _ => {
+    addEmoji("\ud83e\udd17");
+  }}, ["🤗"])]), __jacJsx("button", {"className": "btn-primary", "onClick": addMood}, ["Submit"])]), moodOutput && __jacJsx("div", {"className": "result-wrapper"}, [__jacJsx("div", {"className": "result-content output-panel"}, [__jacJsx("div", {"className": "result-header"}, [__jacJsx("span", {"className": "result-icon"}, ["💡"]), __jacJsx("p", {"className": "result-title"}, ["Insights"])]), __jacJsx("div", {"className": "translation-box"}, [__jacJsx("p", {"className": "translation-text"}, [moodOutput])])])])])])]);
 }
 function app() {
   return __jacJsx(Router, {}, [__jacJsx("div", {"className": "app-container"}, [__jacJsx(Navigation, {}, []), __jacJsx(Routes, {}, [__jacJsx(Route, {"path": "/", "element": __jacJsx(HomePage, {}, [])}, []), __jacJsx(Route, {"path": "/login", "element": __jacJsx(LoginPage, {}, [])}, []), __jacJsx(Route, {"path": "/signup", "element": __jacJsx(SignupPage, {}, [])}, []), __jacJsx(Route, {"path": "/jasiri", "element": __jacJsx(FeaturesPage, {}, [])}, [])])])]);

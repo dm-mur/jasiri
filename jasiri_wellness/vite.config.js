@@ -13,6 +13,7 @@ export default defineConfig({
       output: {
         entryFileNames: "client.[hash].js", // name of the final js file
         assetFileNames: "[name].[ext]",
+        external: ["byllm.lib"]
       },
     },
     outDir: "dist", // final bundled output
@@ -25,4 +26,6 @@ export default defineConfig({
     },
   },
 });
+
+
 

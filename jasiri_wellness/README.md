@@ -1,4 +1,4 @@
-🧾 README – MindMate Harmony Space
+🧾 README – Jasiri MindMate Harmony Space
 AI Mental-Wellbeing Companion using OSP Graphs + Multi-Agent Jac Architecture
 🌱 Project Overview
 
