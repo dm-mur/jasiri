@@ -1,5 +1,5 @@
 # Frontend
- import from react {
+ cl import from react {
     useState,
     useEffect
 }
@@ -256,17 +256,17 @@ cl import from "@jac-client/utils" {
     }
 
     # Home Page
-        def HomePage()  -> any {
-            if jacIsLoggedIn() {
-                return <Navigate to="/jasiri" />;
-            }
-            return <Navigate to="/login" />;
+    def HomePage()  -> any {
+        if jacIsLoggedIn() {
+            return <Navigate to="/jasiri" />;
         }
+        return <Navigate to="/login" />;
+    }
 
 
 
     def FeaturesPage() {
-        #// Check if logged in
+        ## Check if logged in
         if not jacIsLoggedIn() {
             return <Navigate to="/login" />;
         }
@@ -279,7 +279,7 @@ cl import from "@jac-client/utils" {
         # Load existing mood on mount
         useEffect(
             lambda -> None { async def loadMoods() -> None {
-                result = root spawn generate_response(text=input.trim());
+                result = root spawn generate_response();
                 setMoods(result.reports if result.reports else []);
             }
             loadMoods();
@@ -302,13 +302,16 @@ cl import from "@jac-client/utils" {
 
             console.log(result);
             
-            setMoodOutput(result.reports[0][0]) if result.reports else moods;
+            setMoodOutput(result.reports[0]) if result.reports else moods;
             setInput("");
         }
 
         async def getsupportiveResponse(e:any) -> None {
             setMoods(e.target.value);
             
+        }
+        def addEmoji(emoji: str) -> None {
+            setInput(input + emoji);
         }
 
 
@@ -343,10 +346,10 @@ cl import from "@jac-client/utils" {
                         <input
                             type="text"
                             value={input}
-                            placeholder="Type your feelings here..."
-                            className="input-field"
                             onChange={lambda e: any -> None { setInput(e.target.value); }}
                             onKeyPress={lambda e: any -> None { if e.key == "Enter" { addMood(); } }}
+                            placeholder="Type your feelings here..."
+                            className="input-field"
                         />
 
                     <div className="emoji-picker">
@@ -413,6 +416,7 @@ cl import from "@jac-client/utils" {
 
     # Main Application
     def app() -> any {
+    
         return <Router>
             <div 
                 className="app-container"
@@ -421,7 +425,7 @@ cl import from "@jac-client/utils" {
                 <Routes>
                     <Route 
                         path="/"
-                        element={<HomePage />}
+                        element={<HomePage />} 
                     />
                     <Route 
                         path="/login"

@@ -270,9 +270,7 @@ function FeaturesPage() {
           while (1) switch (_context3.n) {
             case 0:
               _context3.n = 1;
-              return __jacSpawn("generate_response", "", {
-                "text": input.trim()
-              });
+              return __jacSpawn("generate_response", "", {});
             case 1:
               result = _context3.v;
               setMoods(result.reports ? result.reports : []);
@@ -312,7 +310,7 @@ function FeaturesPage() {
           case 2:
             result = _context4.v;
             console.log(result);
-            result.reports ? setMoodOutput(result.reports[0][0]) : moods;
+            result.reports ? setMoodOutput(result.reports[0]) : moods;
             setInput("");
           case 3:
             return _context4.a(2);
@@ -336,6 +334,9 @@ function FeaturesPage() {
       }, _callee5);
     }));
     return _getsupportiveResponse.apply(this, arguments);
+  }
+  function addEmoji(emoji) {
+    setInput(input + emoji);
   }
   return __jacJsx("div", {
     "className": "home-page"
@@ -380,8 +381,6 @@ function FeaturesPage() {
   }, [__jacJsx("input", {
     "type": "text",
     "value": input,
-    "placeholder": "Type your feelings here...",
-    "className": "input-field",
     "onChange": function onChange(e) {
       setInput(e.target.value);
     },
@@ -389,7 +388,9 @@ function FeaturesPage() {
       if (e.key === "Enter") {
         addMood();
       }
-    }
+    },
+    "placeholder": "Type your feelings here...",
+    "className": "input-field"
   }, []), __jacJsx("div", {
     "className": "emoji-picker"
   }, [__jacJsx("span", {
