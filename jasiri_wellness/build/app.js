@@ -253,12 +253,16 @@ function FeaturesPage() {
     setInput = _useState14[1];
   var _useState15 = useState(""),
     _useState16 = _slicedToArray(_useState15, 2),
-    moodText = _useState16[0],
-    setMoodText = _useState16[1];
-  var _useState17 = useState(""),
+    moodOutput = _useState16[0],
+    setMoodOutput = _useState16[1];
+  var _useState17 = useState([]),
     _useState18 = _slicedToArray(_useState17, 2),
-    moodOutput = _useState18[0],
-    setMoodOutput = _useState18[1];
+    chatHistory = _useState18[0],
+    setChatHistory = _useState18[1];
+  var _useState19 = useState(""),
+    _useState20 = _slicedToArray(_useState19, 2),
+    agentResponse = _useState20[0],
+    setAgentResponse = _useState20[1];
   useEffect(function () {
     function loadMoods() {
       return _loadMoods.apply(this, arguments);
@@ -270,10 +274,10 @@ function FeaturesPage() {
           while (1) switch (_context3.n) {
             case 0:
               _context3.n = 1;
-              return __jacSpawn("generate_response", "", {});
+              return __jacSpawn("mindMateAgentWalker", "", {});
             case 1:
               result = _context3.v;
-              setMoods(result.reports ? result.reports : []);
+              setMoods(result.response ? result.response : []);
             case 2:
               return _context3.a(2);
           }
@@ -283,11 +287,6 @@ function FeaturesPage() {
     }
     loadMoods();
   }, []);
-  function handleMoodSubmit() {
-    !generate_response({
-      text: moodText
-    });
-  }
   function addMood() {
     return _addMood.apply(this, arguments);
   }
@@ -304,13 +303,15 @@ function FeaturesPage() {
             return _context4.a(2);
           case 1:
             _context4.n = 2;
-            return __jacSpawn("generate_response", "", {
-              "text": input.trim()
+            return __jacSpawn("mindMateAgentWalker", "", {
+              "user_input": input.trim(),
+              "chat_history": chatHistory
             });
           case 2:
             result = _context4.v;
-            console.log(result);
-            result.reports ? setMoodOutput(result.reports[0]) : moods;
+            console.log("AI result:", result);
+            setMoodOutput(result.response ? result.response : "");
+            setChatHistory(result.chat_history ? result.chat_history : []);
             setInput("");
           case 3:
             return _context4.a(2);

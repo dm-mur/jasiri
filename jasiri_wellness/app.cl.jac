@@ -271,49 +271,48 @@ cl import from "@jac-client/utils" {
             return <Navigate to="/login" />;
         }
 
+
         let [moods, setMoods] = useState([]);
         let [input, setInput] = useState("");
-        let [moodText, setMoodText] = useState("");
         let [moodOutput, setMoodOutput] = useState("");
-        
+        let [chatHistory, setChatHistory] = useState([]);
+        let [agentResponse, setAgentResponse] = useState("");
+
         # Load existing mood on mount
         useEffect(
             lambda -> None { async def loadMoods() -> None {
-                result = root spawn generate_response();
-                setMoods(result.reports if result.reports else []);
+                result = root spawn mindMateAgentWalker();
+                setMoods(result.response if result.response else []);
             }
             loadMoods();
         }, []
         );
-
-        def handleMoodSubmit() {
-            spawn generate_response(text=moodText);
-        }
-
-
-        # Add mood handler
-
-
+        # Add mood / message handler
         async def addMood() -> None {
             if not input.trim() {
                 return;
             }
-            result = root spawn generate_response(text=input.trim());
 
-            console.log(result);
-            
-            setMoodOutput(result.reports[0]) if result.reports else moods;
+            # Call the MindMate Walker
+            result = root spawn mindMateAgentWalker(user_input=input.trim(), chat_history=chatHistory);
+
+            console.log("AI result:", result);
+
+            # Update mood output and chat history safely
+            setMoodOutput(result.response if result.response else "");  # use result.response
+            setChatHistory(result.chat_history if result.chat_history else []);  # use result.chat_history
+
+            # Clear input
             setInput("");
         }
 
         async def getsupportiveResponse(e:any) -> None {
             setMoods(e.target.value);
-            
         }
+
         def addEmoji(emoji: str) -> None {
             setInput(input + emoji);
         }
-
 
     return (
         <div className="home-page">
@@ -407,6 +406,7 @@ cl import from "@jac-client/utils" {
                             </div>
                         </div>
                     )}
+
                 </main>
             </div>
         </div>

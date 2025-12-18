@@ -89,25 +89,24 @@ function FeaturesPage() {
   }
   let [moods, setMoods] = useState([]);
   let [input, setInput] = useState("");
-  let [moodText, setMoodText] = useState("");
   let [moodOutput, setMoodOutput] = useState("");
+  let [chatHistory, setChatHistory] = useState([]);
+  let [agentResponse, setAgentResponse] = useState("");
   useEffect(() => {
     async function loadMoods() {
-      let result = await __jacSpawn("generate_response", "", {});
-      setMoods(result.reports ? result.reports : []);
+      let result = await __jacSpawn("mindMateAgentWalker", "", {});
+      setMoods(result.response ? result.response : []);
     }
     loadMoods();
   }, []);
-  function handleMoodSubmit() {
-    !generate_response({text: moodText});
-  }
   async function addMood() {
     if (!input.trim()) {
       return;
     }
-    let result = await __jacSpawn("generate_response", "", {"text": input.trim()});
-    console.log(result);
-    result.reports ? setMoodOutput(result.reports[0]) : moods;
+    let result = await __jacSpawn("mindMateAgentWalker", "", {"user_input": input.trim(), "chat_history": chatHistory});
+    console.log("AI result:", result);
+    setMoodOutput(result.response ? result.response : "");
+    setChatHistory(result.chat_history ? result.chat_history : []);
     setInput("");
   }
   async function getsupportiveResponse(e) {
