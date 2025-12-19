@@ -303,15 +303,13 @@ function FeaturesPage() {
             return _context4.a(2);
           case 1:
             _context4.n = 2;
-            return __jacSpawn("mindMateAgentWalker", "", {
-              "user_input": input.trim(),
-              "chat_history": chatHistory
+            return __jacSpawn("generate_response", "", {
+              "text": input.trim()
             });
           case 2:
             result = _context4.v;
-            console.log("AI result:", result);
-            setMoodOutput(result.response ? result.response : "");
-            setChatHistory(result.chat_history ? result.chat_history : []);
+            console.log(result);
+            result.reports ? setMoodOutput(result.reports[0]) : moods;
             setInput("");
           case 3:
             return _context4.a(2);
@@ -320,19 +318,35 @@ function FeaturesPage() {
     }));
     return _addMood.apply(this, arguments);
   }
-  function getsupportiveResponse(_x3) {
-    return _getsupportiveResponse.apply(this, arguments);
+  function checkChatHistory() {
+    return _checkChatHistory.apply(this, arguments);
   }
-  function _getsupportiveResponse() {
-    _getsupportiveResponse = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5(e) {
+  function _checkChatHistory() {
+    _checkChatHistory = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
       return _regenerator().w(function (_context5) {
         while (1) switch (_context5.n) {
           case 0:
-            setMoods(e.target.value);
+            setChatHistory(chatHistory.concat([moodOutput]));
           case 1:
             return _context5.a(2);
         }
       }, _callee5);
+    }));
+    return _checkChatHistory.apply(this, arguments);
+  }
+  function getsupportiveResponse(_x3) {
+    return _getsupportiveResponse.apply(this, arguments);
+  }
+  function _getsupportiveResponse() {
+    _getsupportiveResponse = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6(e) {
+      return _regenerator().w(function (_context6) {
+        while (1) switch (_context6.n) {
+          case 0:
+            setMoods(e.target.value);
+          case 1:
+            return _context6.a(2);
+        }
+      }, _callee6);
     }));
     return _getsupportiveResponse.apply(this, arguments);
   }

@@ -3,11 +3,6 @@ import json;
 import from datetime {datetime}
 import from datetime {time}
 
-#glob llm: Model = Model(model_name="gemini/gemini-2.5-flash");
-#glob llm: Model = Model(model_name="ollama/llama3:70b");
-#glob llm: Model = Model(model_name="gpt-4o");
-#glob llm_fast: Model = Model(model_name="groq/llama-3.3-70b-versatile");
-#glob llm: Model = Model(model_name="meta-llama/llama-3.3-70b-instruct");
 glob llm: Model = Model(model_name="mistral/mistral-large-latest");
 
 obj EmotionAnalysis {
@@ -69,7 +64,7 @@ edge improves_resilience {
 } # Activity improves Resilience
 
 
-# Backend - walkers
+# Walkers
 walker share_mood {
     has text: str;
 
@@ -82,7 +77,20 @@ walker share_mood {
 walker generate_response {
     has text: str;
 
-    def generate_supportive_response(text:str) -> str by llm();
+    def generate_supportive_response(text:str) -> str by llm(
+        system="""
+        You are MindMate, an empathetic mental health companion with therapeutic training.
+        
+        RESPOND WITH:
+        1. **Emotional Validation** - Name and validate their feeling
+        2. **Brief Normalization** - "It's understandable to feel..." (if appropriate)
+        3. **One Open Question** - Ask a gentle, reflective question
+        4. **Hopeful Closing** - End with encouragement
+        
+        Tone: Warm, non-judgmental, compassionate. Use "I hear..." statements.
+        Length: 2-3 sentences maximum.
+        """
+    );
 
     can generate with `root entry {
         result = self.generate_supportive_response(self.text);
@@ -149,7 +157,7 @@ walker trendAnalyzer {
 walker supportCompanion {
     has suggestions: list[str];
 
-    can suggest with EmotionNode entry{
+    can suggest with Emotion entry{
         for s in self.suggestions{
             suggestion_node = root ++> Suggestion(description=s);
             here +>: managed_with :+> suggestion_node;
@@ -197,10 +205,14 @@ Respond empathetically, supportively, and conversationally.
         # 1. ALWAYS generate therapist response
         self.response = self.therapist_reply(self.user_input);
 
-        # 2. Background abilities (silent)
+        # 2. ALWAYS analyze emotion
         _ = root spawn listener_emotion(user_input=self.user_input);
 
-        # OPTIONAL logic
+        if "suggest" in self.user_input or "help" in self.user_input {
+            _ = root spawn supportCompanion(
+                suggestions=["Practice deep breathing", "Take a short walk", "Write down your thoughts"]
+            );
+        }
         if "week" in self.user_input or "plan" in self.user_input {
             _ = root spawn mentorPlanner(
                 weekly_activities=["Gentle exercise", "Daily journaling"],

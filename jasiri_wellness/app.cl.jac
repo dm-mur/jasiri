@@ -288,22 +288,21 @@ cl import from "@jac-client/utils" {
         }, []
         );
         # Add mood / message handler
+
         async def addMood() -> None {
             if not input.trim() {
                 return;
             }
+            result = root spawn generate_response(text=input.trim());
 
-            # Call the MindMate Walker
-            result = root spawn mindMateAgentWalker(user_input=input.trim(), chat_history=chatHistory);
-
-            console.log("AI result:", result);
-
-            # Update mood output and chat history safely
-            setMoodOutput(result.response if result.response else "");  # use result.response
-            setChatHistory(result.chat_history if result.chat_history else []);  # use result.chat_history
-
-            # Clear input
+            console.log(result);
+            
+            setMoodOutput(result.reports[0]) if result.reports else moods;
             setInput("");
+        }
+        
+        async def checkChatHistory() -> None {
+            setChatHistory(chatHistory.concat([moodOutput]));
         }
 
         async def getsupportiveResponse(e:any) -> None {
@@ -406,7 +405,6 @@ cl import from "@jac-client/utils" {
                             </div>
                         </div>
                     )}
-
                 </main>
             </div>
         </div>

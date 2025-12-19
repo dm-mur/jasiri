@@ -103,11 +103,13 @@ function FeaturesPage() {
     if (!input.trim()) {
       return;
     }
-    let result = await __jacSpawn("mindMateAgentWalker", "", {"user_input": input.trim(), "chat_history": chatHistory});
-    console.log("AI result:", result);
-    setMoodOutput(result.response ? result.response : "");
-    setChatHistory(result.chat_history ? result.chat_history : []);
+    let result = await __jacSpawn("generate_response", "", {"text": input.trim()});
+    console.log(result);
+    result.reports ? setMoodOutput(result.reports[0]) : moods;
     setInput("");
+  }
+  async function checkChatHistory() {
+    setChatHistory(chatHistory.concat([moodOutput]));
   }
   async function getsupportiveResponse(e) {
     setMoods(e.target.value);
